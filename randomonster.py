@@ -1,5 +1,5 @@
-import asyncio
-import httpx
+from asyncio import gather, run
+from httpx import AsyncClient
 
 
 _base_url = 'https://www.dnd5eapi.co/api/2014/'
@@ -10,11 +10,9 @@ _endpoints = ('magic-items', 'monsters', 'spells')
 async def _fetch_names() -> set[str]:
     """Fetch item names from the 5e API endpoints asynchronously."""
     _names = set()
-    async with httpx.AsyncClient(
-        base_url=_base_url, headers=_headers
-    ) as client:
+    async with AsyncClient(base_url=_base_url, headers=_headers) as client:
         request_tasks = [client.get(endpoint) for endpoint in _endpoints]
-        for response in await asyncio.gather(*request_tasks):
+        for response in await gather(*request_tasks):
             if response.status_code == 200:
                 _names = _names.union(
                     {i['name'] for i in response.json().get('results', [])}
@@ -33,7 +31,7 @@ def get_dnd() -> str | None:
 
 
 # run fetch_names coroutine to populate set of names
-names = asyncio.run(_fetch_names())
+names = run(_fetch_names())
 # track used names so random names can be recycled as presets are deleted
 used_names = set()
 
