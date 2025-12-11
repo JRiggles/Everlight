@@ -1,5 +1,5 @@
-from asyncio import gather, run
-from httpx import AsyncClient
+from asyncio import run
+import httpx
 
 
 _base_url = 'https://www.dnd5eapi.co/api/2014/'
@@ -10,14 +10,19 @@ _endpoints = ('magic-items', 'monsters', 'spells')
 async def _fetch_names() -> set[str]:
     """Fetch item names from the 5e API endpoints asynchronously."""
     _names = set()
-    async with AsyncClient(base_url=_base_url, headers=_headers) as client:
-        request_tasks = [client.get(endpoint) for endpoint in _endpoints]
-        for response in await gather(*request_tasks):
+    try:
+        request_tasks = [
+            httpx.get(_base_url + endpoint, headers=_headers)
+            for endpoint in _endpoints
+        ]
+        for response in request_tasks:
             if response.status_code == 200:
                 _names = _names.union(
                     {i['name'] for i in response.json().get('results', [])}
                 )
-    return _names
+        return _names
+    except httpx.ConnectError:
+        return set()
 
 
 def get_dnd() -> str | None:
