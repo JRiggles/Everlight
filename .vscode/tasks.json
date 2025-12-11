@@ -1,0 +1,21 @@
+{
+    // See https://code.visualstudio.com/docs/editor/tasks for more information
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build with py2app",
+            "type": "process",
+            "command": "python",
+            "args": [
+                "setup.py",
+                "py2app",
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [],
+            "detail": "Builds the app using py2app and setup.py"
+        }
+    ]
+}
