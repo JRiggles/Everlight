@@ -18,7 +18,6 @@ from randomonster import get_dnd, names, used_names
 # TODO: randomizer for colors
 # TODO: easier editing of preset names
 # TODO: import presets (storage-general.json)
-# TODO: add README, publish to GitHub
 # TODO: preconfigured animations
 # TODO: drag to rearrange presets
 # TODO: add scene transition timeline? Might be verrrry complicated...
