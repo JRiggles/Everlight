@@ -173,10 +173,10 @@ def index() -> None:
                 return
             with preset_container, ui.card().props('flat bordered'):
                 ui.markdown(f'##### {preset.name}')
-                with ui.row():
+                with ui.row().classes('items-center'):
                     ui.icon('circle', color=preset.color1, size='3rem')
                     ui.label(f'Brightness: {preset.brightness1}')
-                with ui.row():
+                with ui.row().classes('items-center'):
                     ui.icon('circle', color=preset.color2, size='3rem')
                     ui.label(f'Brightness: {preset.brightness2}')
                 with ui.row().classes('justify-between'):
@@ -211,11 +211,28 @@ def index() -> None:
         # notify user
         ui.notify('Preset applied', type='info', color='primary')
 
-    # REFACTOR: prompt for confirmation before deleting
-    # see https://nicegui.io/documentation/dialog#awaitable_dialog for example
-    def delete_preset(name: str) -> None:
+    async def delete_preset(name: str) -> None:
         """Delete the preset with the given name from storage"""
-        if name in app.storage.general:
+        with ui.dialog() as dialog, ui.card().classes('no-shadow'):
+            ui.html(
+                'Are you sure you want to delete the preset'
+                f'<br><b>"{name}"</b>?',
+                sanitize=False,
+                tag='h6',
+            )
+            with ui.row():
+                ui.button(
+                    'Yes',
+                    on_click=lambda: dialog.submit('Yes'),
+                    color='negative',
+                )
+                ui.button(
+                    'No',
+                    on_click=lambda: dialog.submit('No')
+                )
+
+        # choice = await dialog
+        if await dialog == 'Yes' and name in app.storage.general:
             del app.storage.general[name]
             if name in used_names:
                 used_names.remove(name)
