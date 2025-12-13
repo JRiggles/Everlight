@@ -15,6 +15,20 @@
             },
             "problemMatcher": [],
             "detail": "Builds the app using py2app and setup.py"
+        },
+        {
+           "label": "Build with py2app for x86",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/bin/python",
+            "args": [
+                "setup_x86.py",
+                "py2app",
+            ],
+            "group": {
+                "kind": "build",
+            },
+            "problemMatcher": [],
+            "detail": "Builds the app using py2app and setup.py"
         }
     ]
 }
