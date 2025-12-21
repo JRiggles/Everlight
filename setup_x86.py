@@ -11,6 +11,7 @@ DATA_FILES = [('static', ['static/bg1.jpeg']), '.nicegui']
 OPTIONS = {
     'argv_emulation': False,
     'arch': 'x86_64',
+    "bdist_base": "build/bdist.macosx-10.15-x86_64",
     'iconfile': 'static/appicon.png',
     'plist': {
         'CFBundleIdentifier': 'com.jriggles.everlight',
